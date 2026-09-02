@@ -92,19 +92,9 @@
   <!-- ===================== SECCIÓN REGALO (CAJAS) ===================== -->
   <section id="regaloSection" class="panel panel-section hidden">
     <button class="back-btn" data-target="home" type="button">← Volver</button>
-    <h2 class="section-title">Elegí tus regalos 🎁</h2>
-    <p class="section-hint">Decidí cuántas cajas querés y abrilas para descubrir el mensaje</p>
- 
-    <div class="box-selector">
-      <label for="boxCount">¿Cuántas cajas?</label>
-      <div class="stepper">
-        <button id="decBox" type="button" aria-label="Restar caja">−</button>
-        <input type="number" id="boxCount" min="1" max="30" value="6" inputmode="numeric">
-        <button id="incBox" type="button" aria-label="Sumar caja">+</button>
-      </div>
-      <button id="generateBoxes" class="btn btn-generate" type="button">Generar cajas</button>
-    </div>
- 
+    <h2 class="section-title">Abrí tus regalos 🎁</h2>
+    <p class="section-hint">Hacé click en cada caja para descubrir tu carta especial</p>
+
     <div id="boxesGrid" class="boxes-grid"></div>
   </section>
  
@@ -162,33 +152,9 @@
       btn.addEventListener('click', () => showPanel(btn.dataset.target));
     });
 
-    // ---------- Regalo: elegir cantidad de cajas ----------
-    const boxCountInput = document.getElementById('boxCount');
-    const decBox = document.getElementById('decBox');
-    const incBox = document.getElementById('incBox');
-    const generateBtn = document.getElementById('generateBoxes');
+    // ---------- Regalo: cajas de regalo ----------
     const boxesGrid = document.getElementById('boxesGrid');
- 
-    const MIN_BOXES = 1;
-    const MAX_BOXES = 30;
- 
-    function clampBoxCount() {
-      let v = parseInt(boxCountInput.value, 10);
-      if (isNaN(v)) v = MIN_BOXES;
-      v = Math.max(MIN_BOXES, Math.min(MAX_BOXES, v));
-      boxCountInput.value = v;
-      return v;
-    }
- 
-    decBox.addEventListener('click', () => {
-      boxCountInput.value = clampBoxCount() - 1;
-      clampBoxCount();
-    });
-    incBox.addEventListener('click', () => {
-      boxCountInput.value = clampBoxCount() + 1;
-      clampBoxCount();
-    });
-    boxCountInput.addEventListener('change', clampBoxCount);
+    const NUMERO_DE_CAJAS = 10; // Cambia este número para tener más o menos cajas
  
     // Cartas que aparecen al abrir una caja — editá / agregá las que quieras
     const cartas = [
@@ -283,17 +249,14 @@
     }
  
     function generateBoxes() {
-      const count = clampBoxCount();
       boxesGrid.innerHTML = '';
       shuffled = [];
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < NUMERO_DE_CAJAS; i++) {
         boxesGrid.appendChild(createBox(i));
       }
     }
- 
-    generateBtn.addEventListener('click', generateBoxes);
- 
-    // Genera un set inicial de cajas al cargar la página
+
+    // Generar cajas al cargar la página
     generateBoxes();
   </script>
 </body>
