@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleaños · 21 Años</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cumple.css">
+</head>
+<body>
+ 
+  <!-- Fondo decorativo (todo el estilo vive en cumple.css) -->
+  <div class="bg-sparkles" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Globos flotantes -->
+  <div class="balloon balloon-1" aria-hidden="true"></div>
+  <div class="balloon balloon-2" aria-hidden="true"></div>
+  <div class="balloon balloon-3" aria-hidden="true"></div>
+  <div class="balloon balloon-4" aria-hidden="true"></div>
+  <div class="balloon balloon-5" aria-hidden="true"></div>
+  <div class="balloon balloon-6" aria-hidden="true"></div>
+  <div class="balloon balloon-7" aria-hidden="true"></div>
+  <div class="balloon balloon-8" aria-hidden="true"></div>
+
+  <!-- ===================== PANTALLA PRINCIPAL ===================== -->
+  <section id="home" class="panel panel-home">
+    <p class="eyebrow">✨ Se festeja ✨</p>
+    <h1 class="title">Mis 21 años<span class="title-sub">Cami</span></h1>
+    <p class="subtitle">Una celebración especial</p>
+    <p class="subtitle-small">¡Feliz cumpleaños!</p>
+ 
+    <div class="menu-buttons">
+      <button id="btnFotos" class="btn btn-photos" type="button">
+        <span class="btn-icon">📷</span> Fotos
+      </button>
+      <button id="btnRegalo" class="btn btn-gift" type="button">
+        <span class="btn-icon">🎁</span> Regalo
+      </button>
+    </div>
+  </section>
+ 
+  <!-- ===================== SECCIÓN FOTOS ===================== -->
+  <section id="fotosSection" class="panel panel-section hidden">
+    <button class="back-btn" data-target="home" type="button">← Volver</button>
+    <h2 class="section-title">Fotos 📷</h2>
+    <p class="section-hint">Recuerdos especiales</p>
+ 
+    <div class="gallery">
+ 
+      <!-- FOTOS: reemplazá el src="" por tus imágenes reales -->
+      <figure class="card photo-card">
+        <img src="fotos/foto1.jpg" alt="Foto 1">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+ 
+      <figure class="card photo-card">
+        <img src="fotos/foto2.jpg" alt="Foto 2">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+ 
+      <figure class="card photo-card">
+        <img src="fotos/foto3.jpg" alt="Foto 3">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+ 
+      <figure class="card photo-card">
+        <img src="fotos/foto4.jpg" alt="Foto 4">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+
+      <figure class="card photo-card">
+        <img src="fotos/foto5.jpg" alt="Foto 5">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+
+      <figure class="card photo-card">
+        <img src="fotos/foto6.jpg" alt="Foto 6">
+        <figcaption>Escribí un pie de foto</figcaption>
+      </figure>
+
+    </div>
+  </section>
+ 
+  <!-- ===================== SECCIÓN REGALO (CAJAS) ===================== -->
+  <section id="regaloSection" class="panel panel-section hidden">
+    <button class="back-btn" data-target="home" type="button">← Volver</button>
+    <h2 class="section-title">Elegí tus regalos 🎁</h2>
+    <p class="section-hint">Decidí cuántas cajas querés y abrilas para descubrir el mensaje</p>
+ 
+    <div class="box-selector">
+      <label for="boxCount">¿Cuántas cajas?</label>
+      <div class="stepper">
+        <button id="decBox" type="button" aria-label="Restar caja">−</button>
+        <input type="number" id="boxCount" min="1" max="30" value="6" inputmode="numeric">
+        <button id="incBox" type="button" aria-label="Sumar caja">+</button>
+      </div>
+      <button id="generateBoxes" class="btn btn-generate" type="button">Generar cajas</button>
+    </div>
+ 
+    <div id="boxesGrid" class="boxes-grid"></div>
+  </section>
+ 
+  <script>
+    // ---------- Navegación entre secciones ----------
+    const panels = {
+      home: document.getElementById('home'),
+      fotosSection: document.getElementById('fotosSection'),
+      regaloSection: document.getElementById('regaloSection'),
+    };
+ 
+    function showPanel(name) {
+      Object.values(panels).forEach(p => p.classList.add('hidden'));
+      panels[name].classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+ 
+    document.getElementById('btnFotos').addEventListener('click', () => showPanel('fotosSection'));
+    document.getElementById('btnRegalo').addEventListener('click', () => showPanel('regaloSection'));
+ 
+    document.querySelectorAll('.back-btn').forEach(btn => {
+      btn.addEventListener('click', () => showPanel(btn.dataset.target));
+    });
+
+    // ---------- Regalo: elegir cantidad de cajas ----------
+    const boxCountInput = document.getElementById('boxCount');
+    const decBox = document.getElementById('decBox');
+    const incBox = document.getElementById('incBox');
+    const generateBtn = document.getElementById('generateBoxes');
+    const boxesGrid = document.getElementById('boxesGrid');
+ 
+    const MIN_BOXES = 1;
+    const MAX_BOXES = 30;
+ 
+    function clampBoxCount() {
+      let v = parseInt(boxCountInput.value, 10);
+      if (isNaN(v)) v = MIN_BOXES;
+      v = Math.max(MIN_BOXES, Math.min(MAX_BOXES, v));
+      boxCountInput.value = v;
+      return v;
+    }
+ 
+    decBox.addEventListener('click', () => {
+      boxCountInput.value = clampBoxCount() - 1;
+      clampBoxCount();
+    });
+    incBox.addEventListener('click', () => {
+      boxCountInput.value = clampBoxCount() + 1;
+      clampBoxCount();
+    });
+    boxCountInput.addEventListener('change', clampBoxCount);
+ 
+    // Cartas que aparecen al abrir una caja — editá / agregá las que quieras
+    const cartas = [
+      {
+        frente: "💌 Carta 1",
+        detras: "¡Feliz cumple Cami! Que este nuevo año te traiga mil aventuras y alegrías. Sos increíble y te mereces lo mejor. 🎉"
+      },
+      {
+        frente: "💌 Carta 2",
+        detras: "21 años y contando... ¡lo mejor recién empieza! Que este año esté lleno de risas, amor y momentos inolvidables. 🥂"
+      },
+      {
+        frente: "💌 Carta 3",
+        detras: "Gracias por existir y llenar de luz cada día. Ojalá tengas un cumpleaños tan especial como vos. 💛"
+      },
+      {
+        frente: "💌 Carta 4",
+        detras: "Que se cumplan todos tus deseos este año. Sos una persona maravillosa y el mundo es mejor contigo en él. ✨"
+      },
+      {
+        frente: "💌 Carta 5",
+        detras: "¡Feliz 21! Sos una persona increíble. Que este nuevo año te traiga todo lo que soñás y más. 🌟"
+      },
+      {
+        frente: "💌 Carta 6",
+        detras: "Brindo por vos y por todo lo que viene. Que la vida te siga sorprendiendo con cosas hermosas. 🍾"
+      },
+      {
+        frente: "💌 Carta 7",
+        detras: "Un abrazo enorme en tu día especial. Que tengas salud, amor y muchas risas siempre. ¡Feliz cumple! 🎂"
+      },
+      {
+        frente: "💌 Carta 8",
+        detras: "Este es solo el comienzo de un año espectacular. ¡A disfrutar esta nueva etapa! 21 te queda hermoso. 💫"
+      },
+      {
+        frente: "💌 Carta 9",
+        detras: "Que este año esté lleno de momentos inolvidables, nuevas experiencias y mucha felicidad. Te lo mereces todo. 📸"
+      },
+      {
+        frente: "💌 Carta 10",
+        detras: "¡Feliz cumpleaños Cami! Que tus 21 años sean tan brillantes y especiales como vos. Disfrutá cada momento. 🎁"
+      },
+    ];
+ 
+    let shuffled = [];
+    function nextCarta() {
+      if (shuffled.length === 0) {
+        shuffled = [...cartas].sort(() => Math.random() - 0.5);
+      }
+      return shuffled.pop();
+    }
+ 
+    function createBox(index) {
+      const box = document.createElement('button');
+      box.type = 'button';
+      box.className = 'gift-box';
+      box.setAttribute('aria-label', 'Abrir regalo ' + (index + 1));
+ 
+      box.innerHTML = `
+        <span class="box-lid"></span>
+        <span class="box-ribbon-v"></span>
+        <span class="box-ribbon-h"></span>
+        <span class="box-base"></span>
+        <div class="box-carta">
+          <div class="carta-inner">
+            <div class="carta-face carta-front"></div>
+            <div class="carta-face carta-back"></div>
+          </div>
+        </div>
+      `;
+ 
+      box.addEventListener('click', () => {
+        if (box.classList.contains('open')) return;
+        box.classList.add('open');
+        const carta = nextCarta();
+        const cartaElement = box.querySelector('.box-carta');
+        const cartaFront = box.querySelector('.carta-front');
+        const cartaBack = box.querySelector('.carta-back');
+
+        cartaFront.textContent = carta.frente;
+        cartaBack.textContent = carta.detras;
+
+        // Al hacer click en la carta, se da vuelta
+        cartaElement.addEventListener('click', (e) => {
+          e.stopPropagation();
+          cartaElement.classList.toggle('flipped');
+        });
+      });
+ 
+      return box;
+    }
+ 
+    function generateBoxes() {
+      const count = clampBoxCount();
+      boxesGrid.innerHTML = '';
+      shuffled = [];
+      for (let i = 0; i < count; i++) {
+        boxesGrid.appendChild(createBox(i));
+      }
+    }
+ 
+    generateBtn.addEventListener('click', generateBoxes);
+ 
+    // Genera un set inicial de cajas al cargar la página
+    generateBoxes();
+  </script>
+</body>
+</html>
+ 

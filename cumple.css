@@ -1,0 +1,668 @@
+/* =====================================================
+   Cumpleaños 21 — Estilo dorado & negro elegante
+   ===================================================== */
+ 
+:root {
+  --black-0: #000000;
+  --black-1: #0a0a0a;
+  --black-2: #1b181e;
+  --gold: #d4af37;
+  --gold-light: #f3d97e;
+  --gold-dark: #a9832a;
+  --white: #ffffff;
+  --pink: #ff69b4;
+  --pink-light: #ffb6d9;
+  --pink-dark: #ff1493;
+  --cream: #f6ecd9;
+  --cream-dim: #cfc4ae;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  font-size: 16px;
+}
+ 
+* {
+  box-sizing: border-box;
+}
+ 
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+ 
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--pink);
+  background: radial-gradient(circle at 50% 0%, #1a1010 0%, var(--black-1) 45%, var(--black-0) 100%);
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+ 
+/* ---------------- Fondo decorativo ---------------- */
+ 
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(212, 175, 55, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.10) 0%, transparent 50%);
+}
+ 
+.bg-sparkles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.65;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, var(--gold-light), transparent),
+    radial-gradient(1.5px 1.5px at 30% 70%, var(--gold), transparent),
+    radial-gradient(2px 2px at 50% 30%, var(--gold-light), transparent),
+    radial-gradient(1.5px 1.5px at 70% 80%, var(--gold), transparent),
+    radial-gradient(2px 2px at 85% 25%, var(--gold-light), transparent),
+    radial-gradient(1.5px 1.5px at 90% 60%, var(--gold), transparent),
+    radial-gradient(1.5px 1.5px at 20% 90%, var(--gold-light), transparent),
+    radial-gradient(2px 2px at 60% 10%, var(--gold), transparent);
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+ 
+@keyframes twinkle {
+  from { opacity: 0.35; }
+  to   { opacity: 0.85; }
+}
+
+/* ---------------- Globos flotantes ---------------- */
+
+.balloon {
+  position: fixed;
+  bottom: -150px;
+  width: 50px;
+  height: 65px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  z-index: 10;
+  animation: float 15s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.balloon::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.balloon::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.balloon-1 {
+  left: 5%;
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  animation-delay: 0s;
+  animation-duration: 12s;
+}
+
+.balloon-2 {
+  left: 15%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  animation-delay: 2s;
+  animation-duration: 14s;
+}
+
+.balloon-3 {
+  left: 25%;
+  background: linear-gradient(135deg, var(--white), #f0f0f0);
+  animation-delay: 4s;
+  animation-duration: 13s;
+}
+
+.balloon-4 {
+  left: 75%;
+  background: linear-gradient(135deg, var(--pink-light), var(--pink));
+  animation-delay: 1s;
+  animation-duration: 15s;
+}
+
+.balloon-5 {
+  left: 85%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  animation-delay: 3s;
+  animation-duration: 12s;
+}
+
+.balloon-6 {
+  left: 95%;
+  background: linear-gradient(135deg, var(--pink), var(--pink-light));
+  animation-delay: 5s;
+  animation-duration: 14s;
+}
+
+.balloon-7 {
+  left: 35%;
+  background: linear-gradient(135deg, var(--white), #e8e8e8);
+  animation-delay: 6s;
+  animation-duration: 13s;
+}
+
+.balloon-8 {
+  left: 65%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  animation-delay: 7s;
+  animation-duration: 15s;
+}
+
+@keyframes float {
+  0% {
+    bottom: -150px;
+    opacity: 0;
+    transform: translateX(0) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(30px) rotate(5deg);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    bottom: 110vh;
+    opacity: 0;
+    transform: translateX(-30px) rotate(-5deg);
+  }
+}
+ 
+/* ---------------- Layout general de paneles ---------------- */
+ 
+.panel {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 8vh 6vw 6vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+ 
+.hidden {
+  display: none !important;
+}
+ 
+/* ---------------- Pantalla principal ---------------- */
+ 
+.panel-home {
+  justify-content: center;
+  gap: 0.4rem;
+}
+ 
+.eyebrow {
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--gold);
+  margin: 0 0 0.5rem;
+}
+ 
+.title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: clamp(4.5rem, 18vw, 9rem);
+  line-height: 1;
+  margin: 0;
+  color: var(--gold-light);
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.45), 0 0 60px rgba(212, 175, 55, 0.2);
+}
+ 
+.title-sub {
+  display: block;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-top: 0.3rem;
+}
+ 
+.subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  color: var(--pink);
+  margin: 1.6rem 0 0.2rem;
+}
+ 
+.subtitle-small {
+  font-size: 0.9rem;
+  color: var(--pink-light);
+  margin: 0 0 2.5rem;
+}
+ 
+.menu-buttons {
+  display: flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+ 
+/* ---------------- Botones ---------------- */
+ 
+.btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 1rem 2.2rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold);
+  background: linear-gradient(135deg, var(--black-2), var(--black-1));
+  color: var(--gold-light);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+ 
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px rgba(212, 175, 55, 0.25);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--black-0);
+}
+ 
+.btn-icon {
+  font-size: 1.3rem;
+}
+ 
+.btn-generate {
+  margin-top: 1.6rem;
+}
+ 
+/* ---------------- Secciones internas ---------------- */
+ 
+.panel-section {
+  justify-content: flex-start;
+  padding-top: 5rem;
+}
+ 
+.back-btn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: transparent;
+  border: 1px solid var(--gold-dark);
+  color: var(--cream);
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+ 
+.back-btn:hover {
+  background: var(--gold);
+  color: var(--black-0);
+}
+ 
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  color: var(--gold-light);
+  margin: 0 0 0.4rem;
+}
+ 
+.section-hint {
+  color: var(--cream-dim);
+  font-size: 0.9rem;
+  margin: 0 0 2.4rem;
+}
+ 
+/* ---------------- Galería de fotos y cartas ---------------- */
+ 
+.gallery {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.6rem;
+}
+ 
+.card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--black-2);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+ 
+.photo-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+ 
+.photo-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+ 
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+}
+ 
+.photo-card figcaption {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  color: var(--cream-dim);
+  font-style: italic;
+}
+ 
+/* Cartas con efecto flip */
+ 
+.letter-card {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  aspect-ratio: 4 / 5;
+  perspective: 1200px;
+  font-family: inherit;
+}
+ 
+.letter-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+ 
+.letter-card.flipped .letter-inner {
+  transform: rotateY(180deg);
+}
+ 
+.letter-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+ 
+.letter-front {
+  background: linear-gradient(160deg, var(--black-2), var(--black-1));
+  color: var(--gold-light);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+ 
+.letter-back {
+  background: linear-gradient(160deg, var(--gold), var(--gold-dark));
+  color: var(--black-0);
+  transform: rotateY(180deg);
+  font-weight: 500;
+}
+ 
+/* ---------------- Sección regalo ---------------- */
+ 
+.box-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 3rem;
+}
+ 
+.box-selector label {
+  font-size: 0.95rem;
+  color: var(--cream-dim);
+}
+ 
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--black-2);
+  border: 1px solid var(--gold-dark);
+  border-radius: 999px;
+  padding: 0.4rem 0.6rem;
+}
+ 
+.stepper button {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-light);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+ 
+.stepper button:hover {
+  background: var(--gold);
+  color: var(--black-0);
+}
+ 
+.stepper input {
+  width: 3.4rem;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--cream);
+  font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
+}
+ 
+.stepper input::-webkit-outer-spin-button,
+.stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+ 
+/* Grilla de cajas */
+ 
+.boxes-grid {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 2.2rem 1.6rem;
+  padding-bottom: 4rem;
+}
+ 
+.gift-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 140px;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+ 
+.box-base {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  height: 62%;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  transition: transform 0.35s ease;
+}
+ 
+.box-lid {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 56%;
+  height: 18%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  transform-origin: left bottom;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  z-index: 2;
+}
+ 
+.box-ribbon-v {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  top: 0;
+  width: 12%;
+  transform: translateX(-50%);
+  background: var(--black-1);
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+ 
+.box-ribbon-h {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 56%;
+  height: 18%;
+  background: var(--black-1);
+  opacity: 0;
+  z-index: 3;
+  border-radius: 6px 6px 0 0;
+  transition: opacity 0.3s ease;
+}
+ 
+.box-carta {
+  position: absolute;
+  top: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  max-width: 60vw;
+  aspect-ratio: 4 / 5;
+  opacity: 0;
+  pointer-events: none;
+  perspective: 1200px;
+  transition: opacity 0.4s ease 0.2s;
+  z-index: 100;
+}
+
+.carta-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.box-carta.flipped .carta-inner {
+  transform: rotateY(180deg);
+}
+
+.carta-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.carta-front {
+  background: linear-gradient(160deg, var(--pink), var(--pink-dark));
+  color: var(--white);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.carta-back {
+  background: linear-gradient(160deg, var(--gold), var(--gold-dark));
+  color: var(--black-0);
+  transform: rotateY(180deg);
+  font-weight: 500;
+  text-align: center;
+}
+ 
+.gift-box:not(.open):hover .box-base {
+  transform: translateY(-4px);
+}
+ 
+.gift-box.open .box-lid {
+  transform: rotate(-115deg) translateY(-6px);
+  opacity: 0;
+}
+ 
+.gift-box.open .box-ribbon-v {
+  opacity: 0;
+}
+ 
+.gift-box.open .box-carta {
+  opacity: 1;
+  pointer-events: auto;
+}
+ 
+/* ---------------- Responsive ---------------- */
+ 
+@media (max-width: 480px) {
+  .panel {
+    padding: 6vh 5vw 5vh;
+  }
+ 
+  .menu-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+ 
+  .btn {
+    justify-content: center;
+    width: 100%;
+  }
+ 
+  .back-btn {
+    top: 1.2rem;
+    left: 1.2rem;
+  }
+}
