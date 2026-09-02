@@ -154,66 +154,59 @@
 
     // ---------- Regalo: cajas de regalo ----------
     const boxesGrid = document.getElementById('boxesGrid');
-    const NUMERO_DE_CAJAS = 10; // Cambia este número para tener más o menos cajas
+    const NUMERO_DE_CAJAS = 7; // Cambia este número para tener más o menos cajas
+
+    // Funciones para guardar y cargar el estado de las cajas
+    function guardarEstadoCajas(estadoCajas) {
+      localStorage.setItem('cajasAbiertas', JSON.stringify(estadoCajas));
+    }
+
+    function cargarEstadoCajas() {
+      const guardado = localStorage.getItem('cajasAbiertas');
+      return guardado ? JSON.parse(guardado) : {};
+    }
+
+    let estadoCajas = cargarEstadoCajas();
  
     // Cartas que aparecen al abrir una caja — editá / agregá las que quieras
     const cartas = [
       {
-        frente: "💌 Carta 1",
-        detras: "¡Feliz cumple Cami! Que este nuevo año te traiga mil aventuras y alegrías. Sos increíble y te mereces lo mejor. 🎉"
+        frente: "💌 Lucio ",
+        detras: "Prima/Cuña: Feliz cumpleaños!Pasala lindo con tus amigos y familia,que los deseos y sueños que tienes secumplan y logres las metas que te propongas. Tu ser contagia alegria y muchos bifes (👊🏻😂),agradezco el haberte conocido. Que tu sois heureuxavec le mani de mon cousin JAJAJA.P/D: En la pera toda la noche P/D 2: Si no sabés frances, usá el traductor. "
       },
       {
-        frente: "💌 Carta 2",
+        frente: "💌 Viki ",
         detras: "21 años y contando... ¡lo mejor recién empieza! Que este año esté lleno de risas, amor y momentos inolvidables. 🥂"
       },
       {
-        frente: "💌 Carta 3",
+        frente: "💌 Janet ",
         detras: "Gracias por existir y llenar de luz cada día. Ojalá tengas un cumpleaños tan especial como vos. 💛"
       },
       {
-        frente: "💌 Carta 4",
+        frente: "💌 Rambo ",
         detras: "Que se cumplan todos tus deseos este año. Sos una persona maravillosa y el mundo es mejor contigo en él. ✨"
       },
       {
-        frente: "💌 Carta 5",
-        detras: "¡Feliz 21! Sos una persona increíble. Que este nuevo año te traiga todo lo que soñás y más. 🌟"
+        frente: "💌 Rocha ",
+        detras: "Hola Cami quería desearte muy feliz cumple que todos tus deseos se cumplan 🥰😍Quería decirte gracias por tu amistad  incondicional Siempre que necesites algo podes contar conmigo para lo que sea ya lo sabes 🥰✨ con vos siempre vuelvo a ser una niña y es lo más lindo que sacas de mi 💗"
       },
       {
-        frente: "💌 Carta 6",
+        frente: "💌 Anto ",
         detras: "Brindo por vos y por todo lo que viene. Que la vida te siga sorprendiendo con cosas hermosas. 🍾"
       },
       {
-        frente: "💌 Carta 7",
-        detras: "Un abrazo enorme en tu día especial. Que tengas salud, amor y muchas risas siempre. ¡Feliz cumple! 🎂"
-      },
-      {
-        frente: "💌 Carta 8",
-        detras: "Este es solo el comienzo de un año espectacular. ¡A disfrutar esta nueva etapa! 21 te queda hermoso. 💫"
-      },
-      {
-        frente: "💌 Carta 9",
-        detras: "Que este año esté lleno de momentos inolvidables, nuevas experiencias y mucha felicidad. Te lo mereces todo. 📸"
-      },
-      {
-        frente: "💌 Carta 10",
-        detras: "¡Feliz cumpleaños Cami! Que tus 21 años sean tan brillantes y especiales como vos. Disfrutá cada momento. 🎁"
-      },
-    ];
- 
-    let shuffled = [];
-    function nextCarta() {
-      if (shuffled.length === 0) {
-        shuffled = [...cartas].sort(() => Math.random() - 0.5);
+        frente: "💌 Lucas ",
+        detras: "Amor, feliz 21 añitos. En este gran día para vos, te quiero desear que lo pases de la mejor manera y que lo disfrutes. Sé que para vos este día es uno más y que no es el mejor del mundo, pero vos te mereces ser feliz; la vida ya se merece hacerte feliz. Sos lo mejor que este mundo tiene, con tu bonita sonrisa, tus cortes de pelo y tu manera de hacer las cosas —aunque te duelan después, pero eso es lo que te hace feliz— y el no rendirte. No voy a arruinar esta carta con agradecerte por estar a mi lado y por estar al lado de mi familia. Con amor y cariño, te amo mucho, bb."
       }
-      return shuffled.pop();
-    }
- 
+    ];
+
     function createBox(index) {
       const box = document.createElement('button');
       box.type = 'button';
       box.className = 'gift-box';
       box.setAttribute('aria-label', 'Abrir regalo ' + (index + 1));
- 
+      box.dataset.index = index;
+
       box.innerHTML = `
         <span class="box-lid"></span>
         <span class="box-ribbon-v"></span>
@@ -226,31 +219,71 @@
           </div>
         </div>
       `;
- 
-      box.addEventListener('click', () => {
-        if (box.classList.contains('open')) return;
+
+      const cartaElement = box.querySelector('.box-carta');
+      const cartaFront = box.querySelector('.carta-front');
+      const cartaBack = box.querySelector('.carta-back');
+
+      // Restaurar estado si ya fue abierta antes
+      if (estadoCajas[index]) {
         box.classList.add('open');
-        const carta = nextCarta();
-        const cartaElement = box.querySelector('.box-carta');
-        const cartaFront = box.querySelector('.carta-front');
-        const cartaBack = box.querySelector('.carta-back');
+        cartaFront.textContent = estadoCajas[index].frente;
+        cartaBack.textContent = estadoCajas[index].detras;
 
-        cartaFront.textContent = carta.frente;
-        cartaBack.textContent = carta.detras;
+        if (estadoCajas[index].flipped) {
+          cartaElement.classList.add('flipped');
+        }
+      }
 
-        // Al hacer click en la carta, se da vuelta
-        cartaElement.addEventListener('click', (e) => {
-          e.stopPropagation();
-          cartaElement.classList.toggle('flipped');
-        });
+      // Evento de click en la caja para abrir/cerrar
+      box.addEventListener('click', () => {
+        if (box.classList.contains('open')) {
+          // Si ya está abierta, cerrarla
+          box.classList.remove('open');
+          cartaElement.classList.remove('flipped');
+          cartaFront.textContent = '';
+          cartaBack.textContent = '';
+
+          // Eliminar del estado guardado
+          delete estadoCajas[index];
+          guardarEstadoCajas(estadoCajas);
+        } else {
+          // Si está cerrada, abrirla
+          box.classList.add('open');
+
+          const carta = cartas[index];
+          cartaFront.textContent = carta.frente;
+          cartaBack.textContent = carta.detras;
+
+          // Guardar estado de la caja abierta
+          estadoCajas[index] = {
+            frente: carta.frente,
+            detras: carta.detras,
+            flipped: false
+          };
+          guardarEstadoCajas(estadoCajas);
+        }
       });
- 
+
+      // Al hacer click en la carta, se da vuelta (solo si está abierta)
+      cartaElement.addEventListener('click', (e) => {
+        if (!box.classList.contains('open')) return;
+
+        e.stopPropagation();
+        cartaElement.classList.toggle('flipped');
+
+        // Guardar estado de volteado
+        if (estadoCajas[index]) {
+          estadoCajas[index].flipped = cartaElement.classList.contains('flipped');
+          guardarEstadoCajas(estadoCajas);
+        }
+      });
+
       return box;
     }
  
     function generateBoxes() {
       boxesGrid.innerHTML = '';
-      shuffled = [];
       for (let i = 0; i < NUMERO_DE_CAJAS; i++) {
         boxesGrid.appendChild(createBox(i));
       }
