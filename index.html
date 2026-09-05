@@ -156,7 +156,7 @@
     const boxesGrid = document.getElementById('boxesGrid');
     const NUMERO_DE_CAJAS = 7; // Cambia este número para tener más o menos cajas
 
-    // Funciones para guardar y cargar el estado de las cajas
+    // Funciones para guardar y cargar qué cajas ya se abrieron (solo un marcador, no el texto)
     function guardarEstadoCajas(estadoCajas) {
       localStorage.setItem('cajasAbiertas', JSON.stringify(estadoCajas));
     }
@@ -167,6 +167,15 @@
     }
 
     let estadoCajas = cargarEstadoCajas();
+
+    // Solo puede haber una carta mostrándose en pantalla a la vez
+    function ocultarTodasLasCartas() {
+      document.querySelectorAll('.gift-box.showing').forEach(b => b.classList.remove('showing'));
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') ocultarTodasLasCartas();
+    });
  
     // Cartas que aparecen al abrir una caja — editá / agregá las que quieras
     const cartas = [
@@ -191,8 +200,8 @@
         detras: "Hola Cami quería desearte muy feliz cumple que todos tus deseos se cumplan 🥰😍Quería decirte gracias por tu amistad  incondicional Siempre que necesites algo podes contar conmigo para lo que sea ya lo sabes 🥰✨ con vos siempre vuelvo a ser una niña y es lo más lindo que sacas de mi 💗"
       },
       {
-        frente: "💌 Anto ",
-        detras: "Brindo por vos y por todo lo que viene. Que la vida te siga sorprendiendo con cosas hermosas. 🍾"
+        frente: "💌 Lurdes ",
+        detras: "Para mi amiga, en tu cumpleaños 💕Hoy quiero aprovechar este día tan especial para decirte lo importante que sos para mí. Hemos pasado tantas cosas juntas, momentos lindos, momentos difíciles, risas, lágrimas, locuras y recuerdos que voy a guardar siempre en mi corazón.Después de todo lo que vivimos, puedo decir que me siento muy afortunada de tenerte en mi vida. Sos una de esas personas que llegan y dejan una huella para siempre. Gracias por estar, por escucharme, por acompañarme y por compartir conmigo tantos momentos que hicieron nuestra amistad tan especial.Quiero que sepas que te amo muchísimo y que siempre voy a desear lo mejor para vos. Deseo de corazón que seas muy feliz, que puedas cumplir todos tus sueños, que nunca te falten motivos para sonreír y que la vida te devuelva todo lo lindo que das.En este dia espero que lleguen muchas cosas hermosas, nuevas oportunidades, momentos inolvidables y personas que te quieran y valorenFeliz cumpleaños, amiga. ❤️ Gracias por tanto,  y por tantos recuerdos juntas. Ojalá sigamos compartiendo muchísimos momentos más y que nuestra amistad siga creciendo con el tiempo.Te amo muchísimo y siempre voy a estar para vos. Que seas muy feliz hoy y siempre. Feliz cumpleaños, mi amiga hermosa. 🎂💕"
       },
       {
         frente: "💌 Lucas ",
@@ -212,7 +221,9 @@
         <span class="box-ribbon-v"></span>
         <span class="box-ribbon-h"></span>
         <span class="box-base"></span>
+        <span class="box-backdrop"></span>
         <div class="box-carta">
+          <span class="carta-close" role="button" tabindex="0" aria-label="Cerrar carta">✕</span>
           <div class="carta-inner">
             <div class="carta-face carta-front"></div>
             <div class="carta-face carta-back"></div>
@@ -223,60 +234,49 @@
       const cartaElement = box.querySelector('.box-carta');
       const cartaFront = box.querySelector('.carta-front');
       const cartaBack = box.querySelector('.carta-back');
+      const cartaClose = box.querySelector('.carta-close');
 
-      // Restaurar estado si ya fue abierta antes
+      cartaFront.textContent = cartas[index].frente;
+      cartaBack.textContent = cartas[index].detras;
+
+      // Restaurar marca de "ya abierta" (la tapa queda abierta, pero la carta no se muestra sola)
       if (estadoCajas[index]) {
         box.classList.add('open');
-        cartaFront.textContent = estadoCajas[index].frente;
-        cartaBack.textContent = estadoCajas[index].detras;
-
-        if (estadoCajas[index].flipped) {
-          cartaElement.classList.add('flipped');
-        }
       }
 
-      // Evento de click en la caja para abrir/cerrar
+      // Evento de click en la caja: desenvuelve el regalo y muestra/oculta la carta
       box.addEventListener('click', () => {
-        if (box.classList.contains('open')) {
-          // Si ya está abierta, cerrarla
-          box.classList.remove('open');
-          cartaElement.classList.remove('flipped');
-          cartaFront.textContent = '';
-          cartaBack.textContent = '';
-
-          // Eliminar del estado guardado
-          delete estadoCajas[index];
-          guardarEstadoCajas(estadoCajas);
-        } else {
-          // Si está cerrada, abrirla
+        if (!box.classList.contains('open')) {
           box.classList.add('open');
-
-          const carta = cartas[index];
-          cartaFront.textContent = carta.frente;
-          cartaBack.textContent = carta.detras;
-
-          // Guardar estado de la caja abierta
-          estadoCajas[index] = {
-            frente: carta.frente,
-            detras: carta.detras,
-            flipped: false
-          };
+          estadoCajas[index] = true;
           guardarEstadoCajas(estadoCajas);
+        }
+
+        if (box.classList.contains('showing')) {
+          box.classList.remove('showing');
+        } else {
+          ocultarTodasLasCartas();
+          box.classList.add('showing');
         }
       });
 
-      // Al hacer click en la carta, se da vuelta (solo si está abierta)
-      cartaElement.addEventListener('click', (e) => {
-        if (!box.classList.contains('open')) return;
+      // Cerrar con el botón ✕
+      cartaClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        box.classList.remove('showing');
+      });
+      cartaClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.stopPropagation();
+          box.classList.remove('showing');
+        }
+      });
 
+      // Al hacer click en la carta, se da vuelta
+      cartaElement.addEventListener('click', (e) => {
         e.stopPropagation();
         cartaElement.classList.toggle('flipped');
-
-        // Guardar estado de volteado
-        if (estadoCajas[index]) {
-          estadoCajas[index].flipped = cartaElement.classList.contains('flipped');
-          guardarEstadoCajas(estadoCajas);
-        }
       });
 
       return box;
