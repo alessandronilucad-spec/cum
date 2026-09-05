@@ -568,19 +568,29 @@ body {
   transition: opacity 0.3s ease;
 }
  
+.box-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
 .box-carta {
-  position: absolute;
-  top: 105%;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  max-width: 60vw;
-  aspect-ratio: 4 / 5;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 420px);
+  height: min(78vh, 520px);
   opacity: 0;
   pointer-events: none;
   perspective: 1200px;
-  transition: opacity 0.4s ease 0.2s;
-  z-index: 100;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
 }
 
 .carta-inner {
@@ -600,22 +610,37 @@ body {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.8rem 1.6rem;
   backface-visibility: hidden;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .carta-front {
   background: linear-gradient(160deg, var(--pink), var(--pink-dark));
   color: var(--white);
   font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 700;
+  text-align: center;
+}
+
+.carta-front::after {
+  content: 'Tocá la carta para leer el mensaje 👉';
+  margin-top: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.85;
 }
 
 .carta-back {
@@ -623,25 +648,78 @@ body {
   color: var(--black-0);
   transform: rotateY(180deg);
   font-weight: 500;
-  text-align: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  scrollbar-color: var(--black-1) transparent;
 }
- 
-.gift-box:not(.open):hover .box-base {
+
+.carta-face::-webkit-scrollbar {
+  width: 6px;
+}
+
+.carta-face::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+}
+
+.carta-back::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.carta-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--black-1);
+  color: var(--gold);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  z-index: 1001;
+}
+
+.gift-box:not(.showing):hover .box-base {
   transform: translateY(-4px);
 }
- 
-.gift-box.open .box-lid {
+
+.gift-box.showing .box-lid {
   transform: rotate(-115deg) translateY(-6px);
   opacity: 0;
 }
- 
-.gift-box.open .box-ribbon-v {
+
+.gift-box.showing .box-ribbon-v {
   opacity: 0;
 }
- 
-.gift-box.open .box-carta {
+
+.gift-box.showing .box-carta {
   opacity: 1;
   pointer-events: auto;
+}
+
+.gift-box.showing .box-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 480px) {
+  .box-carta {
+    width: min(94vw, 420px);
+    height: min(72vh, 520px);
+  }
+
+  .carta-face {
+    padding: 1.4rem 1.2rem;
+  }
 }
  
 /* ---------------- Responsive ---------------- */

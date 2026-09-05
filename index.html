@@ -154,7 +154,7 @@
 
     // ---------- Regalo: cajas de regalo ----------
     const boxesGrid = document.getElementById('boxesGrid');
-    const NUMERO_DE_CAJAS = 7; // Cambia este número para tener más o menos cajas
+    const NUMERO_DE_CAJAS = 5; // Cambia este número para tener más o menos cajas
 
     // Funciones para guardar y cargar qué cajas ya se abrieron (solo un marcador, no el texto)
     function guardarEstadoCajas(estadoCajas) {
@@ -169,8 +169,17 @@
     let estadoCajas = cargarEstadoCajas();
 
     // Solo puede haber una carta mostrándose en pantalla a la vez
+    function actualizarScrollBody() {
+      document.body.style.overflow = document.querySelector('.gift-box.showing') ? 'hidden' : '';
+    }
+
     function ocultarTodasLasCartas() {
-      document.querySelectorAll('.gift-box.showing').forEach(b => b.classList.remove('showing'));
+      document.querySelectorAll('.gift-box.showing').forEach(b => {
+        b.classList.remove('showing');
+        const carta = b.querySelector('.box-carta');
+        if (carta) carta.classList.remove('flipped');
+      });
+      actualizarScrollBody();
     }
 
     document.addEventListener('keydown', (e) => {
@@ -182,14 +191,6 @@
       {
         frente: "💌 Lucio ",
         detras: "Prima/Cuña: Feliz cumpleaños!Pasala lindo con tus amigos y familia,que los deseos y sueños que tienes secumplan y logres las metas que te propongas. Tu ser contagia alegria y muchos bifes (👊🏻😂),agradezco el haberte conocido. Que tu sois heureuxavec le mani de mon cousin JAJAJA.P/D: En la pera toda la noche P/D 2: Si no sabés frances, usá el traductor. "
-      },
-      {
-        frente: "💌 Viki ",
-        detras: "21 años y contando... ¡lo mejor recién empieza! Que este año esté lleno de risas, amor y momentos inolvidables. 🥂"
-      },
-      {
-        frente: "💌 Janet ",
-        detras: "Gracias por existir y llenar de luz cada día. Ojalá tengas un cumpleaños tan especial como vos. 💛"
       },
       {
         frente: "💌 Rambo ",
@@ -244,7 +245,15 @@
         box.classList.add('open');
       }
 
-      // Evento de click en la caja: desenvuelve el regalo y muestra/oculta la carta
+      function cerrarCarta() {
+        box.classList.remove('showing');
+        cartaElement.classList.remove('flipped');
+        actualizarScrollBody();
+      }
+
+      // Evento de click en la caja: desenvuelve el regalo y muestra/oculta la carta.
+      // Una vez desenvuelta, la caja queda "abierta" para siempre y cada click
+      // vuelve a mostrar la carta, así se puede releer cuando quieras.
       box.addEventListener('click', () => {
         if (!box.classList.contains('open')) {
           box.classList.add('open');
@@ -253,23 +262,24 @@
         }
 
         if (box.classList.contains('showing')) {
-          box.classList.remove('showing');
+          cerrarCarta();
         } else {
           ocultarTodasLasCartas();
           box.classList.add('showing');
+          actualizarScrollBody();
         }
       });
 
       // Cerrar con el botón ✕
       cartaClose.addEventListener('click', (e) => {
         e.stopPropagation();
-        box.classList.remove('showing');
+        cerrarCarta();
       });
       cartaClose.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           e.stopPropagation();
-          box.classList.remove('showing');
+          cerrarCarta();
         }
       });
 
